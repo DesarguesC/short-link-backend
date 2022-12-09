@@ -16,11 +16,12 @@ func AddUrl(url *model.Url) {
 
 func QueryUrl(Id int) *model.Url {
 	tmp := new(model.Url)
+	tmp.Id = Id
 	err := model.DB.Debug().Find(&tmp).Error
 	if err != nil {
 		logrus.Error("sql queryUrl fail")
 	}
-	return tmp
+	return tmp // 返回整个结构体
 }
 
 func UpdateUrl(url *model.Url) { //
