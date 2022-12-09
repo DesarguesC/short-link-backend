@@ -33,20 +33,21 @@ func QueryUrl(c echo.Context) (err error) { //url details
 	return c.JSON(http.StatusOK, resp)
 }
 
+// 信息缺失能bind吗
 func UpdateUrl(c echo.Context) (err error) { //url details
 	url := new(model.Url)
 	if err = c.Bind(url); err != nil {
 		logrus.Error("Bind Fail")
 	}
 	databases.UpdateUrl(url)
-	return c.JSON(http.StatusOK, nil) //?
+	return c.JSON(http.StatusOK, nil) //
 }
 
 func DelUrl(c echo.Context) (err error) { //url details
 	var id int
 	if err = c.Bind(id); err != nil {
-		logrus.Error("Bind Fail")
+		logrus.Error("Bind Failed")
 	}
 	databases.DelUrl(id)
-	return c.JSON(http.StatusOK, nil) //?
+	return c.JSON(http.StatusOK, nil) //
 }

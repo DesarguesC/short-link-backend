@@ -9,10 +9,11 @@ type Url struct {
 	Origin     string    `gorm:"type:varchar(200)" form:"origin" json:"origin"`
 	Short      string    `gorm:"type:varchar(40)" form:"short" json:"short"`
 	Comment    string    `gorm:"type:varchar(100)" form:"comment" json:"comment"`
-	StartTime  time.Time `gorm:"type:datetime;autoCreateTime"`
-	ExpireTime time.Time `gorm:"type:datetime"`
+	StartTime  time.Time `gorm:"type:datetime;autoCreateTime" json:"start-time"`
+	ExpireTime time.Time `gorm:"type:datetime" json:"expire-time"`
 }
 
+//var counturl int
 type Users struct {
 	Name  string `gorm:"type:varchar(20)"`
 	Email string `gorm:"type:varchar(50)"`
