@@ -14,7 +14,6 @@ func InitWebFramework() {
 
 	logrus.Info("echo framework initialized")
 }
-
 func StartServer() {
 	e.Logger.Fatal(e.Start(":1926"))
 }
