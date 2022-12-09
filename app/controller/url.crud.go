@@ -51,3 +51,13 @@ func DelUrl(c echo.Context) (err error) { //url details
 	databases.DelUrl(id)
 	return c.JSON(http.StatusOK, nil) //
 }
+
+// Post
+func PauseUrl(c echo.Context) error { //
+	var id int
+	if err := c.Bind(id); err != nil {
+		logrus.Error("Bind Failed")
+	}
+	databases.PauseUel(id)
+	return c.JSON(http.StatusOK, nil) //
+}

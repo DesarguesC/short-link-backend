@@ -41,3 +41,7 @@ func DelUrl(Id int) {
 		logrus.Error("sql del fail")
 	}
 }
+// Post
+func PauseUel(Id int)  {// 取消重定向？
+
+}
