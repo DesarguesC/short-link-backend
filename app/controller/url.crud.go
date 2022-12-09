@@ -6,6 +6,7 @@ import (
 	"go-svc-tpl/databases"
 	"go-svc-tpl/model"
 	"net/http"
+	"strconv"
 )
 
 // url 的crud qwq
@@ -33,12 +34,11 @@ func QueryUrl(c echo.Context) (err error) { //url details
 	return c.JSON(http.StatusOK, resp)
 }
 
-// 信息缺失能bind吗
+// UpdateUrl  :post
 func UpdateUrl(c echo.Context) (err error) { //url details
 	url := new(model.Url)
-	if err = c.Bind(url); err != nil {
-		logrus.Error("Bind Fail")
-	}
+	url.Id, _ = strconv.Atoi(c.FormValue("Id"))
+	url.Origin = c.FormValue("origin")
 	databases.UpdateUrl(url)
 	return c.JSON(http.StatusOK, nil) //
 }
