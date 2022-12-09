@@ -6,42 +6,47 @@ import (
 	"go-svc-tpl/model"
 )
 
-func AddUrl(url *model.Url) {
+func AddUrl(url *model.Url) error {
 	tmp := *url
 	err := model.DB.Debug().Create(&tmp).Error
 	if err != nil {
 		logrus.Error("sql addUrl fail")
 	}
+	return err
 }
 
-func QueryUrl(Id int) *model.Url {
+func QueryUrl(Id int) (*model.Url, error) {
 	tmp := new(model.Url)
 	tmp.Id = Id
 	err := model.DB.Debug().Find(&tmp).Error
 	if err != nil {
 		logrus.Error("sql queryUrl fail")
 	}
-	return tmp // 返回整个结构体
+	return tmp, err // 返回整个结构体
 }
 
-func UpdateUrl(url *model.Url) { //
+func UpdateUrl(url *model.Url) error { //
 	var tmp model.Url
 	tmp = *url
 	err := model.DB.Debug().Updates(&tmp).Error
 	if err != nil {
 		logrus.Error("sql update error")
 	}
+	return err
 }
 
-func DelUrl(Id int) {
+func DelUrl(Id int) error {
 	tmp := new(model.Url)
 	tmp.Id = Id
 	err := model.DB.Debug().Delete(&tmp).Error
 	if err != nil {
 		logrus.Error("sql del fail")
 	}
+	return err
 }
-// Post
-func PauseUel(Id int)  {// 取消重定向？
 
+// Post
+func PauseUel(Id int) error { // 取消重定向？
+	//
+	return nil
 }

@@ -23,9 +23,7 @@ func connectDatabase() {
 	if err := viper.ReadInConfig(); err != nil {
 		logrus.Panic(err)
 	}
-
 	loginInfo := viper.GetStringMapString("sql")
-
 	dbArgs := loginInfo["username"] + ":" + loginInfo["password"] +
 		"@(localhost)/" + loginInfo["db_name"] + "?charset=utf8mb4&parseTime=True&loc=Local"
 	var err error

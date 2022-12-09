@@ -11,7 +11,7 @@ type Response struct {
 	Data interface{} `json:"data"`
 }
 
-//demo
+// demo
 func SendResponse(c echo.Context, code int, msg string, data ...interface{}) error {
 	return c.JSON(http.StatusOK, Response{
 		Code: code,
