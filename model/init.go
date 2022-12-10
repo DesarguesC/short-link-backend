@@ -11,7 +11,7 @@ var DB *gorm.DB
 
 func Init() {
 	connectDatabase()
-	err := DB.AutoMigrate() // TODO: add table structs here
+	err := DB.AutoMigrate(&Url{}, &Users{}) // TODO: add table structs here
 	if err != nil {
 		logrus.Fatal(err)
 	}
@@ -23,6 +23,7 @@ func connectDatabase() {
 	if err := viper.ReadInConfig(); err != nil {
 		logrus.Panic(err)
 	}
+
 	loginInfo := viper.GetStringMapString("sql")
 	dbArgs := loginInfo["username"] + ":" + loginInfo["password"] +
 		"@(localhost)/" + loginInfo["db_name"] + "?charset=utf8mb4&parseTime=True&loc=Local"

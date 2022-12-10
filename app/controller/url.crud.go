@@ -9,9 +9,6 @@ import (
 )
 
 // url 的crud qwq
-func GenerateShortUrl(url *model.Url) { //生成短链接算法
-	// 修改为短链接
-}
 
 func CreateUrl(c echo.Context) (err error) {
 	data := new(model.CreateInput)
@@ -26,8 +23,11 @@ func CreateUrl(c echo.Context) (err error) {
 	(*url).StartTime = (*data).StartTime
 	GenerateShortUrl(url)
 	err = databases.AddUrl(url)
-	return response.SendResponse(c, 102, "create is ok")
-	// 改成response方法？
+	if err != nil {
+		logrus.Error("dbAdd err")
+		return response.SendResponse(c, 400, "dbAdd err")
+	}
+	return response.SendResponse(c, 200, "create is ok")
 }
 
 func QueryUrl(c echo.Context) (err error) { //url details
@@ -49,11 +49,11 @@ func UpdateUrl(c echo.Context) (err error) { //url details
 		logrus.Error("Bind Fail")
 	}
 	url := new(model.Url)
-	(*url).Origin = (*data).Origin
 	(*url).Comment = (*data).Comment
 	(*url).Id = (*data).Id
 	(*url).ExpireTime = (*data).ExpireTime
 	(*url).StartTime = (*data).StartTime
+	(*url).Enable = true
 	err = databases.UpdateUrl(url)
 	if err != nil {
 		return response.SendResponse(c, 400, "update failed")
@@ -73,13 +73,12 @@ func DelUrl(c echo.Context) (err error) { //url details
 	return response.SendResponse(c, 200, "del succeed") //
 }
 
-// Post
 func PauseUrl(c echo.Context) error { //
 	var id int
 	if err := c.Bind(id); err != nil {
 		logrus.Error("Bind Failed")
 	}
-	err := databases.PauseUel(id)
+	err := databases.PauseUrl(id)
 	if err != nil {
 		return response.SendResponse(c, 400, "Pause failed")
 	}

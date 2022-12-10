@@ -19,4 +19,5 @@ func addRoutes() {
 	api.POST("/url/update", controller.UpdateUrl)
 	api.POST("/url/Delete", controller.DelUrl)
 	api.POST("/url/Delete", controller.PauseUrl)
+	api.POST("/short/*", controller.Visit)
 }

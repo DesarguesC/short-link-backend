@@ -2,7 +2,7 @@ package model
 
 import "time"
 
-// TODO: add new model
+// TODO:  add new model
 type Url struct {
 	Id int `gorm:"type:uint;primaryKey autoincrement" form:"id" json:"id"`
 	//UserId     int       `gorm:"type:varchar(10) column:user_id" form:"user_id" json:"user_id"`
@@ -11,6 +11,7 @@ type Url struct {
 	Comment    string    `gorm:"type:varchar(100)" form:"comment" json:"comment"`
 	StartTime  time.Time `gorm:"type:datetime;autoCreateTime" json:"start-time"`
 	ExpireTime time.Time `gorm:"type:datetime" json:"expire-time"`
+	Enable     bool      `gorm:"type:bool" json:"enable"`
 }
 
 type Users struct {
@@ -23,7 +24,7 @@ type Users struct {
 
 // dto 与前端交互
 type CreateInput struct { // 前端输入
-	Id         int       `gorm:"type:uint;primaryKey autoincrement" form:"id" json:"id"`
+	Id         int       `gorm:"type:uint;primaryKey AUTO_INCREMENT" form:"id" json:"id"`
 	Origin     string    `gorm:"type:varchar(200)" form:"origin" json:"origin"`
 	Comment    string    `gorm:"type:varchar(100)" form:"comment" json:"comment"`
 	StartTime  time.Time `gorm:"type:datetime;autoCreateTime" json:"start-time"`
@@ -31,7 +32,7 @@ type CreateInput struct { // 前端输入
 }
 
 type UpdateInput struct {
-	Id         int       `gorm:"type:uint;primaryKey autoincrement"  json:"id"`
+	Id         int       `gorm:"type:uint;primaryKey AUTO_INCREMENT"  json:"id"`
 	Origin     string    `gorm:"type:varchar(200)"  json:"origin"`
 	Comment    string    `gorm:"type:varchar(100)"  json:"comment"`
 	StartTime  time.Time `gorm:"type:datetime;autoCreateTime" json:"start-time"`
@@ -45,4 +46,7 @@ type ProfileInput struct {
 type ProfileOutput struct {
 	Time       time.Time `gorm:"type:datetime;autoCreateTime" json:"time"`
 	AccessTime time.Time `gorm:"type:datetime;autoCreateTime" json:"access-time"`
+}
+type ShortUrl struct {
+	Short string `gorm:"type:varchar(40)" form:"short" json:"short"` //?
 }

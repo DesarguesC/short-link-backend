@@ -19,6 +19,7 @@ func QueryUrl(Id int) (*model.Url, error) {
 	tmp := new(model.Url)
 	tmp.Id = Id
 	err := model.DB.Debug().Find(&tmp).Error
+
 	if err != nil {
 		logrus.Error("sql queryUrl fail")
 	}
@@ -46,7 +47,15 @@ func DelUrl(Id int) error {
 }
 
 // Post
-func PauseUel(Id int) error { // 取消重定向？
-	//
-	return nil
+func PauseUrl(Id int) error {
+	tmp, err := QueryUrl(Id)
+	if err != nil {
+		logrus.Error("pause not found")
+	}
+	(*tmp).Enable = false
+	err = model.DB.Debug().Updates(tmp).Error
+	if err != nil {
+		logrus.Error("pause failed")
+	}
+	return err
 }
