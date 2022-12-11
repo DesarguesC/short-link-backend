@@ -47,6 +47,3 @@ type ProfileOutput struct {
 	Time       time.Time `gorm:"type:datetime;autoCreateTime" json:"time"`
 	AccessTime time.Time `gorm:"type:datetime;autoCreateTime" json:"access-time"`
 }
-type ShortUrl struct {
-	Short string `gorm:"type:varchar(40)" form:"short" json:"short"` //?
-}

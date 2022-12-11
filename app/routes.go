@@ -18,6 +18,7 @@ func addRoutes() {
 	api.POST("/url/query", controller.QueryUrl)
 	api.POST("/url/update", controller.UpdateUrl)
 	api.POST("/url/Delete", controller.DelUrl)
-	api.POST("/url/Delete", controller.PauseUrl)
-	api.POST("/short/*", controller.Visit)
+	api.POST("/url/Pause", controller.PauseUrl)
+	api.POST("/url/Continue", controller.PauseUrl)
+	api.POST("/short/:hash", controller.Visit) //动态参数路由 /:hash
 }

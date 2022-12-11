@@ -59,3 +59,15 @@ func PauseUrl(Id int) error {
 	}
 	return err
 }
+func ContinueUrl(Id int) error {
+	tmp, err := QueryUrl(Id)
+	if err != nil {
+		logrus.Error("continue Not found")
+	}
+	(*tmp).Enable = true
+	err = model.DB.Debug().Updates(tmp).Error
+	if err != nil {
+		logrus.Error("continue failed")
+	}
+	return err
+}

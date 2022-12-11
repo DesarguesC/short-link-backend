@@ -84,3 +84,14 @@ func PauseUrl(c echo.Context) error { //
 	}
 	return response.SendResponse(c, 200, "pause succeed") //
 }
+func ContinueUrl(c echo.Context) error {
+	var id int
+	if err := c.Bind(id); err != nil {
+		logrus.Error("Bind Failed")
+	}
+	err := databases.ContinueUrl(id)
+	if err != nil {
+		return response.SendResponse(c, 400, "Continue failed")
+	}
+	return response.SendResponse(c, 200, "Continue succeed") //
+}
