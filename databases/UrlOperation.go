@@ -15,11 +15,11 @@ func AddUrl(url *model.Url) error {
 	return err
 }
 
-func QueryUrl(Id int) (*model.Url, error) {
+func QueryUrl(short string) (*model.Url, error) {
 	tmp := new(model.Url)
-	tmp.Id = Id
-	err := model.DB.Debug().Find(&tmp).Error
-
+	tmp.Short = short
+	//where ()可删？
+	err := model.DB.Debug().Where("short = ?", short).Find(&tmp).Error
 	if err != nil {
 		logrus.Error("sql queryUrl fail")
 	}
@@ -36,10 +36,10 @@ func UpdateUrl(url *model.Url) error { //
 	return err
 }
 
-func DelUrl(Id int) error {
+func DelUrl(short string) error {
 	tmp := new(model.Url)
-	tmp.Id = Id
-	err := model.DB.Debug().Delete(&tmp).Error
+	tmp.Short = short
+	err := model.DB.Debug().Where("short = ?", short).Delete(&tmp).Error
 	if err != nil {
 		logrus.Error("sql del fail")
 	}
@@ -47,8 +47,8 @@ func DelUrl(Id int) error {
 }
 
 // Post
-func PauseUrl(Id int) error {
-	tmp, err := QueryUrl(Id)
+func PauseUrl(short string) error {
+	tmp, err := QueryUrl(short)
 	if err != nil {
 		logrus.Error("pause not found")
 	}
@@ -59,8 +59,8 @@ func PauseUrl(Id int) error {
 	}
 	return err
 }
-func ContinueUrl(Id int) error {
-	tmp, err := QueryUrl(Id)
+func ContinueUrl(short string) error {
+	tmp, err := QueryUrl(short)
 	if err != nil {
 		logrus.Error("continue Not found")
 	}

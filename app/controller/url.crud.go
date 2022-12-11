@@ -31,11 +31,11 @@ func CreateUrl(c echo.Context) (err error) {
 }
 
 func QueryUrl(c echo.Context) (err error) { //url details
-	var id int
-	if err = c.Bind(id); err != nil {
+	data := new(model.QueryInput)
+	if err = c.Bind(data); err != nil {
 		logrus.Error("Bind Fail")
 	}
-	resp, err := databases.QueryUrl(id)
+	resp, err := databases.QueryUrl((*data).Short)
 	if err != nil {
 		return response.SendResponse(c, 400, "query failed")
 	}
@@ -50,7 +50,6 @@ func UpdateUrl(c echo.Context) (err error) { //url details
 	}
 	url := new(model.Url)
 	(*url).Comment = (*data).Comment
-	(*url).Id = (*data).Id
 	(*url).ExpireTime = (*data).ExpireTime
 	(*url).StartTime = (*data).StartTime
 	(*url).Enable = true
@@ -62,11 +61,11 @@ func UpdateUrl(c echo.Context) (err error) { //url details
 }
 
 func DelUrl(c echo.Context) (err error) { //url details
-	var id int
-	if err = c.Bind(id); err != nil {
-		logrus.Error("Bind Failed")
+	data := new(model.QueryInput)
+	if err = c.Bind(data); err != nil {
+		logrus.Error("Bind Fail")
 	}
-	err = databases.DelUrl(id)
+	err = databases.DelUrl((*data).Short)
 	if err != nil {
 		return response.SendResponse(c, 400, "Del failed")
 	}
@@ -74,22 +73,22 @@ func DelUrl(c echo.Context) (err error) { //url details
 }
 
 func PauseUrl(c echo.Context) error { //
-	var id int
-	if err := c.Bind(id); err != nil {
+	data := new(model.DelInput)
+	if err := c.Bind(data); err != nil {
 		logrus.Error("Bind Failed")
 	}
-	err := databases.PauseUrl(id)
+	err := databases.PauseUrl((*data).Short)
 	if err != nil {
 		return response.SendResponse(c, 400, "Pause failed")
 	}
 	return response.SendResponse(c, 200, "pause succeed") //
 }
 func ContinueUrl(c echo.Context) error {
-	var id int
-	if err := c.Bind(id); err != nil {
+	data := new(model.DelInput)
+	if err := c.Bind(data); err != nil {
 		logrus.Error("Bind Failed")
 	}
-	err := databases.ContinueUrl(id)
+	err := databases.ContinueUrl((*data).Short)
 	if err != nil {
 		return response.SendResponse(c, 400, "Continue failed")
 	}
