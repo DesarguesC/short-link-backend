@@ -14,12 +14,16 @@ type Url struct {
 	Enable     bool      `gorm:"type:bool" json:"enable"`
 }
 
+// var counturl int
 type Users struct {
 	Name  string `gorm:"type:varchar(20)"`
 	Email string `gorm:"type:varchar(50)"`
 	Pwd   string `gorm:"type:varchar(90)"`
 	SecQ  string `gorm:"type:varchar(100)"`
 	SecA  string `gorm:"type:varchar(100)"`
+	//IPpub      string    `gorm:"type:varchar(100)"form:"ippub" json:"ippub"`
+	//IPpri      string    `gorm:"type:varchar(100)"form:"ippri" json:"ippri"`
+	LatestTime time.Time `gorm:"type:datetime" json:"expire-time"`
 }
 
 // dto 与前端交互
