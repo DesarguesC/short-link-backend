@@ -29,7 +29,16 @@ func Users_register(c echo.Context) error {
 	secA := c.FormValue("secA")
 	current_time := time.Now()
 
-	new_user := model.Users{name, email, pwd, secQ, secA, current_time}
+	new_user := model.Users{}
+	new_user.Name = name
+	new_user.Email = email
+	new_user.Pwd = pwd
+	new_user.SecQ = secQ
+	new_user.SecA = secA
+	new_user.LatestTime = current_time
+
+	//new_user := model.Users{1, name, email, pwd, secQ, secA, current_time}
+
 	err := model.DB.Debug().Create(&new_user).Error
 	if err != nil {
 		status = "nil"

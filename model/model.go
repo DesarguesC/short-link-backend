@@ -16,14 +16,15 @@ type Url struct {
 
 // var counturl int
 type Users struct {
-	Name  string `gorm:"type:varchar(20)"`
-	Email string `gorm:"type:varchar(50)"`
-	Pwd   string `gorm:"type:varchar(90)"`
-	SecQ  string `gorm:"type:varchar(100)"`
-	SecA  string `gorm:"type:varchar(100)"`
+	Id    int    `gorm:"type:uint;primaryKey autoincrement=1000" form:"id" json:"id"`
+	Name  string `gorm:"type:varchar(20)" form:"name" json:"name"`
+	Email string `gorm:"type:varchar(50)" form:"email" json:"email"`
+	Pwd   string `gorm:"type:varchar(90)" form:"pwd" json:"pwd"`
+	SecQ  string `gorm:"type:varchar(100)" form:"secq" json:"secq"`
+	SecA  string `gorm:"type:varchar(100)" form:"seca" json:"seca"`
 	//IPpub      string    `gorm:"type:varchar(100)"form:"ippub" json:"ippub"`
 	//IPpri      string    `gorm:"type:varchar(100)"form:"ippri" json:"ippri"`
-	LatestTime time.Time `gorm:"type:datetime" json:"expire-time"`
+	LatestTime time.Time `gorm:"type:datetime" form:"expire_time" json:"expire_time"`
 }
 
 // dto 与前端交互
