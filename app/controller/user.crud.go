@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-// {host}/user/register/:name/:email/:pwd/:secQ/:secA
+// {host}/user/register (/:name/:email/:pwd/:secQ/:secA)
 
 var status string
 
@@ -21,6 +21,7 @@ func Users_Judge(c echo.Context) error {
 	return response.SendResponse(c, 901, "login", status)
 }
 
+// {host}/user/register
 func Users_register(c echo.Context) error {
 	name := c.FormValue("name")
 	email := c.FormValue("email")
@@ -48,7 +49,7 @@ func Users_register(c echo.Context) error {
 	return response.SendResponse(c, 101, "User creating seccess", status)
 }
 
-// {host}/url/login/:email/:pwd
+// {host}/user/login (/:email/:pwd)
 // -> query
 func User_login(c echo.Context) error {
 	email := c.FormValue("email")
@@ -78,14 +79,14 @@ func User_logout(c echo.Context) error {
 
 // {host}/user/security
 func User_reset_pwd(c echo.Context) error {
-	name := status
-	if name == "nil" {
-		return response.SendResponse(c, 900, "didn't login", status)
-	}
+
+	name := c.FormValue("name")
+	email := c.FormValue("email")
 	secA := c.FormValue("secA")
 	newpwd := c.FormValue("newpwd")
-	a_user := model.Users{}
+	a_user := new(model.Users)
 	a_user.Name = name
+	a_user.Email = email
 	err := model.DB.Debug().Find(&a_user).Error
 	if err != nil {
 		logrus.Fatal("Unknown Error")
@@ -125,7 +126,28 @@ func User_login_get(c echo.Context) error {
 	a_user.Name = name
 	err := model.DB.Debug().Find(&a_user).Error
 	if err != nil {
-		return response.SendResponse(c, 111, "nno User (FATAL)", status)
+		return response.SendResponse(c, 111, "no User (FATAL)", status)
 	}
 	return response.SendResponse(c, 310, "getting information succeeded", a_user.LatestTime, status, a_user.Name)
+}
+
+// {host}/user/pwdreset
+func User_pwd_reset(c echo.Context) error {
+	if status == "nil" {
+		response.SendResponse(c, 900, "didn't login", status)
+	}
+	name := status
+	a_user := model.Users{}
+	a_user.Name = name
+	old_pwd := c.FormValue("oldpwd")
+	new_pwd := c.FormValue("newpwd")
+	err := model.DB.Debug().Find(&a_user).Error
+	if err != nil {
+		return response.SendResponse(c, 111, "no User (FATAL)", status)
+	}
+	if a_user.Pwd != old_pwd {
+		return response.SendResponse(c, 600, "incorrect old password", status)
+	}
+	a_user.Pwd = new_pwd
+	return response.SendResponse(c, 601, "password reset success", status)
 }

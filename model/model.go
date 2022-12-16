@@ -25,6 +25,9 @@ type Users struct {
 	//IPpub      string    `gorm:"type:varchar(100)"form:"ippub" json:"ippub"`
 	//IPpri      string    `gorm:"type:varchar(100)"form:"ippri" json:"ippri"`
 	LatestTime time.Time `gorm:"type:datetime" form:"expire_time" json:"expire_time"`
+	// url[]	?
+	// Id: auto-increasement.
+	// name,email,pwd,secq,seca mustn't contain special characters
 }
 
 // dto 与前端交互
