@@ -45,6 +45,7 @@ type UpdateInput struct {
 	StartTime  time.Time `gorm:"type:datetime;autoCreateTime" json:"start-time"`
 	ExpireTime time.Time `gorm:"type:datetime" json:"expire-time"`
 }
+
 type DelInput struct {
 	Short string `gorm:"type:varchar(40)" form:"short" json:"short"` //?
 }

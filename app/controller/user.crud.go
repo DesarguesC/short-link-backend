@@ -128,7 +128,7 @@ func User_login_get(c echo.Context) error {
 	if err != nil {
 		return response.SendResponse(c, 111, "no User (FATAL)", status)
 	}
-	return response.SendResponse(c, 310, "getting information succeeded", a_user.LatestTime, status, a_user.Name)
+	return response.SendResponse(c, 310, "getting information succeeded", a_user.LatestTime, a_user.Name, status)
 }
 
 // {host}/user/pwdreset
