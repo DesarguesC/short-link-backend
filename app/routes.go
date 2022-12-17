@@ -25,6 +25,7 @@ func addRoutes() {
 
 	api.POST("/user/register", controller.Users_register, middleware.CheckRegister)
 	api.POST("/user/login", controller.User_login, middleware.CheckLogin)
+	api.POST("/user/logout", controller.User_logout)
 	api.POST("/user/security", controller.User_reset_pwd, middleware.CheckSecure)
 	api.POST("/user/info", controller.User_get)
 	api.POST("/user/record/get", controller.User_login_get)

@@ -13,7 +13,7 @@ import (
 func CreateUrl(c echo.Context) (err error) {
 	data := new(model.CreateInput)
 	if err = c.Bind(data); err != nil {
-		logrus.Error("Bind Fail")
+		logrus.Error("Bind Failed")
 	}
 	url := new(model.Url)
 	(*url).Origin = (*data).Origin
