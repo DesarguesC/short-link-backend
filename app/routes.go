@@ -12,7 +12,7 @@ func ping(c echo.Context) error {
 }
 
 func addRoutes() {
-	api := e.Group("api")
+	api := e.Group("api") // /api
 	api.GET("/doc/*", echoSwagger.WrapHandler)
 	api.GET("/ping", ping)
 	api.POST("/url/create", controller.CreateUrl)

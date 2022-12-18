@@ -6,13 +6,13 @@ import (
 	"go-svc-tpl/model"
 )
 
-func AddUrl(url *model.Url) error {
+func AddUrl(url *model.Url) (error, string) {
 	tmp := *url
 	err := model.DB.Debug().Create(&tmp).Error
 	if err != nil {
-		logrus.Error("sql addUrl fail")
+		logrus.Error(err)
 	}
-	return err
+	return err, (*url).Origin
 }
 
 func QueryUrl(short string) (*model.Url, error) {

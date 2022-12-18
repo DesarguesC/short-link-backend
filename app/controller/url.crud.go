@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"github.com/labstack/echo/v4"
 	"github.com/sirupsen/logrus"
 	"go-svc-tpl/app/response"
@@ -14,6 +15,7 @@ func CreateUrl(c echo.Context) (err error) {
 	data := new(model.CreateInput)
 	if err = c.Bind(data); err != nil {
 		logrus.Error("Bind Failed")
+		return response.SendResponse(c, 400, "Bind Failed")
 	}
 	url := new(model.Url)
 	(*url).Origin = (*data).Origin
@@ -22,12 +24,13 @@ func CreateUrl(c echo.Context) (err error) {
 	(*url).ExpireTime = (*data).ExpireTime
 	(*url).StartTime = (*data).StartTime
 	GenerateShortUrl(url)
-	err = databases.AddUrl(url)
+	err, info := databases.AddUrl(url)
+	fmt.Println(info)
 	if err != nil {
 		logrus.Error("dbAdd err")
 		return response.SendResponse(c, 400, "dbAdd err")
 	}
-	return response.SendResponse(c, 200, "create is ok")
+	return response.SendResponse(c, 200, "create is ok", (*url).Origin)
 }
 
 func QueryUrl(c echo.Context) (err error) { //url details
@@ -39,6 +42,7 @@ func QueryUrl(c echo.Context) (err error) { //url details
 	if err != nil {
 		return response.SendResponse(c, 400, "query failed")
 	}
+	//
 	return response.SendResponse(c, 200, "query succeed", *resp)
 }
 
