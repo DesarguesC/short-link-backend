@@ -2,6 +2,7 @@ package databases
 
 //gorm
 import (
+	"fmt"
 	"github.com/sirupsen/logrus"
 	"go-svc-tpl/model"
 )
@@ -9,11 +10,12 @@ import (
 func QueryUrl(short string) (*model.Url, error) {
 	tmp := new(model.Url)
 	tmp.Short = short
-	//这里用find找不到不会报错
+	fmt.Println(short)
 	err := model.DB.Debug().Where("short = ?", short).First(&tmp).Error
 	if err != nil {
 		logrus.Error(err)
 	}
+	fmt.Println()
 	return tmp, err // 返回整个结构体
 }
 
@@ -38,13 +40,14 @@ func DelUrl(short string) error {
 }
 
 // Post
+// updates 无法更新0值（flase） qwq 查半天
 func PauseUrl(short string) (error, *model.Url) {
 	tmp, err := QueryUrl(short)
 	if err != nil {
 		logrus.Error(err)
 	}
-	tmp.Enable = false
-	err = model.DB.Debug().Updates(tmp).Error
+	tmp.Enable = "unable"
+	err = model.DB.Debug().Where("short = ?", tmp.Short).Updates(&tmp).Error
 	if err != nil {
 		logrus.Error(err)
 	}
@@ -55,8 +58,8 @@ func ContinueUrl(short string) (error, *model.Url) {
 	if err != nil {
 		logrus.Error(err)
 	}
-	tmp.Enable = true
-	err = model.DB.Debug().Updates(tmp).Error
+	tmp.Enable = "able"
+	err = model.DB.Debug().Where("short = ?", short).Updates(&tmp).Error
 	if err != nil {
 		logrus.Error(err)
 	}

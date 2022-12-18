@@ -11,7 +11,7 @@ type Url struct {
 	Comment    string    `gorm:"type:varchar(100)" form:"comment" json:"comment"`
 	StartTime  time.Time `gorm:"type:datetime;autoCreateTime" json:"start-time"`
 	ExpireTime time.Time `gorm:"type:datetime" json:"expire-time"` //2022-01-01T08:00:00+08:00
-	Enable     bool      `gorm:"type:bool" json:"enable"`
+	Enable     string    `gorm:"type:varchar(40)" json:"enable"`
 }
 
 // var counturl int
