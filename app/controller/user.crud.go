@@ -29,6 +29,7 @@ func Users_register(c echo.Context) error {
 	data := new(model.RegisterInput)
 	if err := c.Bind(data); err != nil {
 		logrus.Error("Bind Failed")
+		return response.SendResponse(c, 400, "Bind Failed")
 	}
 	current_time := time.Now()
 	new_user := new(model.Users)
@@ -67,7 +68,7 @@ func Users_register(c echo.Context) error {
 		return response.SendResponse(c, 000, "User create failed", status)
 	}
 	status = new_user.Name
-	return response.SendResponse(c, 101, "User creating seccess", status)
+	return response.SendResponse(c, 101, "User creating success", status)
 
 }
 
@@ -78,6 +79,7 @@ func User_login(c echo.Context) error {
 	data := new(model.LoginInput)
 	if err := c.Bind(data); err != nil {
 		logrus.Error("Bind Failed")
+		return response.SendResponse(c, 400, "Bind Failed")
 	}
 	return response.SendResponse(c, -100, "test", (*data).Email)
 

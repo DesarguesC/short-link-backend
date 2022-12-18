@@ -22,7 +22,7 @@ type RegisterStruct struct {
 
 // 登录时的输入字符验证
 type LoginStruct struct {
-	Email string `form:"email" json:"email" query:"email" validate:"contains=@[.]*.com"`
+	Email string `form:"email" json:"email" query:"email" validate:"contains=@[.*].com"`
 	//Name  string `json:"name" validate:"required,excludesall=!@#$%^&*()_-{},ne=nil"`
 	Pwd string `form:"pwd" json:"pwd" query:"pwd" validate:"excludesall=!@#$%^&*()_-{}"`
 }
