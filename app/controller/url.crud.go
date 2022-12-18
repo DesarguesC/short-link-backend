@@ -23,7 +23,7 @@ func CreateUrl(c echo.Context) (err error) {
 	url.Comment = data.Comment
 	url.ExpireTime = data.ExpireTime
 	url.StartTime = data.StartTime
-	url.Enable = true
+	url.Enable = "able"
 	err = model.DB.Debug().Where("origin = ?", (url).Origin).First(url).Error
 	if err != gorm.ErrRecordNotFound {
 		return response.SendResponse(c, 400, "have created")
@@ -74,7 +74,7 @@ func UpdateUrl(c echo.Context) (err error) { //url details
 	if err != nil {
 		return response.SendResponse(c, 400, "update failed")
 	}
-	return response.SendResponse(c, 200, "update succeed", *url)
+	return response.SendResponse(c, 200, "update succeed", *url) //
 }
 
 func DelUrl(c echo.Context) (err error) { //url details

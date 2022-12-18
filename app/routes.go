@@ -12,6 +12,9 @@ func ping(c echo.Context) error {
 }
 
 func addRoutes() {
+	visit := e.Group("visit", middleware.RedictMiddleware)
+	visit.GET("/:hash", controller.Visit)
+
 	api := e.Group("api")
 	api.GET("/doc/*", echoSwagger.WrapHandler)
 	api.GET("/ping", ping)
@@ -21,7 +24,6 @@ func addRoutes() {
 	api.POST("/url/Delete", controller.DelUrl)
 	api.POST("/url/Pause", controller.PauseUrl)
 	api.POST("/url/Continue", controller.ContinueUrl)
-	e.GET("/visit/:hash", controller.Visit) //动态参数路由 /:hash
 
 	api.POST("/user/register", controller.Users_register, middleware.CheckRegister)
 	api.POST("/user/login", controller.User_login, middleware.CheckLogin)
