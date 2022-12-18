@@ -1,12 +1,12 @@
 package controller
 
 import (
-	"fmt"
 	"github.com/labstack/echo/v4"
 	"github.com/sirupsen/logrus"
 	"go-svc-tpl/app/response"
 	"go-svc-tpl/databases"
 	"go-svc-tpl/model"
+	"gorm.io/gorm"
 )
 
 // url 的crud qwq
@@ -14,35 +14,48 @@ import (
 func CreateUrl(c echo.Context) (err error) {
 	data := new(model.CreateInput)
 	if err = c.Bind(data); err != nil {
-		logrus.Error("Bind Failed")
+		logrus.Error(err)
 		return response.SendResponse(c, 400, "Bind Failed")
 	}
+
 	url := new(model.Url)
-	(*url).Origin = (*data).Origin
-	(*url).Comment = (*data).Comment
-	(*url).Id = (*data).Id
-	(*url).ExpireTime = (*data).ExpireTime
-	(*url).StartTime = (*data).StartTime
-	GenerateShortUrl(url)
-	err, info := databases.AddUrl(url)
-	fmt.Println(info)
+	url.Origin = data.Origin
+	url.Comment = data.Comment
+	url.ExpireTime = data.ExpireTime
+	url.StartTime = data.StartTime
+	url.Enable = true
+	err = model.DB.Debug().Where("origin = ?", (url).Origin).First(url).Error
+	if err != gorm.ErrRecordNotFound {
+		return response.SendResponse(c, 400, "have created")
+	}
+	err = model.DB.Debug().Create(url).Error
+	//fmt.Println((*url).Id)
 	if err != nil {
-		logrus.Error("dbAdd err")
+		logrus.Error(err)
 		return response.SendResponse(c, 400, "dbAdd err")
 	}
-	return response.SendResponse(c, 200, "create is ok", (*url).Origin)
+	GenerateShortUrl(url)
+	err = model.DB.Debug().Updates(url).Error
+	if err != nil {
+		logrus.Error(err)
+		return response.SendResponse(c, 400, "update error")
+	}
+	return response.SendResponse(c, 200, "create is ok", *url)
 }
 
 func QueryUrl(c echo.Context) (err error) { //url details
 	data := new(model.QueryInput)
 	if err = c.Bind(data); err != nil {
-		logrus.Error("Bind Fail")
+		logrus.Error(err)
+		return response.SendResponse(c, 400, "Bind Fail")
 	}
 	resp, err := databases.QueryUrl((*data).Short)
 	if err != nil {
-		return response.SendResponse(c, 400, "query failed")
+		if err == gorm.ErrRecordNotFound {
+			return response.SendResponse(c, 400, "not found")
+		}
+		return response.SendResponse(c, 400, "sql queryUrl fail")
 	}
-	//
 	return response.SendResponse(c, 200, "query succeed", *resp)
 }
 
@@ -53,15 +66,15 @@ func UpdateUrl(c echo.Context) (err error) { //url details
 		logrus.Error("Bind Fail")
 	}
 	url := new(model.Url)
-	(*url).Comment = (*data).Comment
-	(*url).ExpireTime = (*data).ExpireTime
-	(*url).StartTime = (*data).StartTime
-	(*url).Enable = true
+	url.Origin = data.Origin
+	url.Comment = (data).Comment
+	url.ExpireTime = data.ExpireTime
+	url.StartTime = data.StartTime
 	err = databases.UpdateUrl(url)
 	if err != nil {
 		return response.SendResponse(c, 400, "update failed")
 	}
-	return response.SendResponse(c, 200, "update succeed")
+	return response.SendResponse(c, 200, "update succeed", *url)
 }
 
 func DelUrl(c echo.Context) (err error) { //url details
@@ -69,7 +82,7 @@ func DelUrl(c echo.Context) (err error) { //url details
 	if err = c.Bind(data); err != nil {
 		logrus.Error("Bind Fail")
 	}
-	err = databases.DelUrl((*data).Short)
+	err = databases.DelUrl(data.Short)
 	if err != nil {
 		return response.SendResponse(c, 400, "Del failed")
 	}
@@ -81,20 +94,21 @@ func PauseUrl(c echo.Context) error { //
 	if err := c.Bind(data); err != nil {
 		logrus.Error("Bind Failed")
 	}
-	err := databases.PauseUrl((*data).Short)
+	err, resp := databases.PauseUrl(data.Short)
 	if err != nil {
-		return response.SendResponse(c, 400, "Pause failed")
+		return response.SendResponse(c, 400, "Pause failed", resp)
 	}
-	return response.SendResponse(c, 200, "pause succeed") //
+	return response.SendResponse(c, 200, "pause succeed", resp) //
 }
 func ContinueUrl(c echo.Context) error {
 	data := new(model.DelInput)
 	if err := c.Bind(data); err != nil {
-		logrus.Error("Bind Failed")
+		logrus.Error(err)
+		return response.SendResponse(c, 200, "Bind error") //
 	}
-	err := databases.ContinueUrl((*data).Short)
+	err, resp := databases.ContinueUrl(data.Short)
 	if err != nil {
-		return response.SendResponse(c, 400, "Continue failed")
+		return response.SendResponse(c, 400, "Continue failed", resp)
 	}
-	return response.SendResponse(c, 200, "Continue succeed") //
+	return response.SendResponse(c, 200, "Continue succeed", resp) //
 }

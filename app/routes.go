@@ -12,16 +12,16 @@ func ping(c echo.Context) error {
 }
 
 func addRoutes() {
-	api := e.Group("api") // /api
+	api := e.Group("api")
 	api.GET("/doc/*", echoSwagger.WrapHandler)
 	api.GET("/ping", ping)
-	api.POST("/url/create", controller.CreateUrl)
-	api.POST("/url/query", controller.QueryUrl)
-	api.POST("/url/update", controller.UpdateUrl)
+	api.POST("/url/Create", controller.CreateUrl)
+	api.POST("/url/Query", controller.QueryUrl)
+	api.POST("/url/Update", controller.UpdateUrl)
 	api.POST("/url/Delete", controller.DelUrl)
 	api.POST("/url/Pause", controller.PauseUrl)
 	api.POST("/url/Continue", controller.ContinueUrl)
-	api.POST("/short/:hash", controller.Visit) //动态参数路由 /:hash
+	e.GET("/visit/:hash", controller.Visit) //动态参数路由 /:hash
 
 	api.POST("/user/register", controller.Users_register, middleware.CheckRegister)
 	api.POST("/user/login", controller.User_login, middleware.CheckLogin)

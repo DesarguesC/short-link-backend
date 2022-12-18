@@ -9,8 +9,7 @@ import (
 // 6位字符串
 func GenerateShortUrl(url *model.Url) { //生成短链接算法
 	Id := url.Id
-	var prefix = "short/" //
-	url.Short = prefix + Encode(Id)
+	url.Short = Encode(Id)
 }
 func Encode(UrlId int) string { // id ->string(62)
 	var base int = 62
